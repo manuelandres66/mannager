@@ -14,6 +14,7 @@ def update_currency():
             account.total_pesos = account.total_dollars * DOLLAR
         else:
             account.total_dollars = round(account.total_pesos / DOLLAR, 2)
+        account.save()
     return DOLLAR
 
 # Create your views here.
