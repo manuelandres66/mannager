@@ -4,6 +4,8 @@ import requests
 
 # Create your views here.
 def home(request):
-    dollar = requests.get("https://api.exchangeratesapi.io/v1/latest?access_key=8a920d3e399466722e755da29ad02a18&base=COP&symbols=USA")
+    headers =  {'X-RapidAPI-Key': '3b9b9c776emsh06c4f835f217b1ep1daf80jsn05841d6a2883',
+                'X-RapidAPI-Host': 'currency-exchange.p.rapidapi.com'}
+    dollar = requests.get("https://currency-exchange.p.rapidapi.com/listquotes", headers=headers)
     print(dollar)
     return HttpResponse(dollar)
