@@ -1,11 +1,12 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 import requests
+from bs4 import BeautifulSoup
 
 # Create your views here.
 def home(request):
-    headers =  {'X-RapidAPI-Key': '3b9b9c776emsh06c4f835f217b1ep1daf80jsn05841d6a2883',
-                'X-RapidAPI-Host': 'currency-exchange.p.rapidapi.com'}
-    dollar = requests.get("https://currency-exchange.p.rapidapi.com/exchange?from='USD'&to='COP'&q='1'", headers=headers)
-    print(dollar)
-    return HttpResponse(dollar)
+    html_content = requests.get("https://www.dolarhoy.co").text
+    soup = BeautifulSoup(html_content,"html.parser")
+    header_element = soup.select('tr')[17].select('td')[-1].text[2:7]
+    DOLLAR = int(header_element.replace(',', ''))
+    return HttpResponse(DOLLAR)
