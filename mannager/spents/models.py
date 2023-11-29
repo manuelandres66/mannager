@@ -7,6 +7,8 @@ class Account(models.Model):
     total_dollars = models.FloatField()
     total_pesos = models.IntegerField()
     currency_dollars = models.BooleanField()
+    def __str__(self):
+        return self.name
 
 class SubCash(models.Model):
     dollars = models.FloatField()
