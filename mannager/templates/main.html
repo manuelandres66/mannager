@@ -6,4 +6,13 @@
         <h1>Hola</h1>
         <h2>{{dollar}}</h2>
     </body>
+    <script>
+        const id = prompt();
+        fetch('/api/delete', {
+            method: 'POST',
+            body: JSON.stringify({type:0, id:id}),
+            headers: {"Content-type": "application/json; charset=UTF-8"}
+        })
+        .then((response) => console.log(response))
+    </script>
 </html>

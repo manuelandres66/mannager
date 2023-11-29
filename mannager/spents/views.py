@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 import requests
 from bs4 import BeautifulSoup
-from .models import Account
+from .models import Account, Spent, Earn
 
 def update_currency():
     html_content = requests.get("https://www.dolarhoy.co").text
@@ -21,3 +21,12 @@ def update_currency():
 def home(request):
     dollar = update_currency()
     return render(request, 'main.html', {'dollar' : dollar})
+
+def delete(request):
+    if request.method == "POST":
+        if request.POST['type'] == 0:
+            Earn.objects.filter(id=request.POST['id']).delete()
+        elif request.POST['type'] == 1:
+            Spent.objects.filter(id=request.POST['id']).delete()
+        return HttpResponse(status=202)
+    return HttpResponse(status=400)

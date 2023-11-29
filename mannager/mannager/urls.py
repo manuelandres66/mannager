@@ -16,9 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from spents.views import home
+from spents.views import home, delete
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', home, name='home')
+    path('', home, name='home'),
+    path('api/delete', delete, name='delete')
 ]
