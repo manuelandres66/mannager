@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 import requests
 from bs4 import BeautifulSoup
+from django.views.decorators.csrf import csrf_exempt
 from .models import Account, Spent, Earn
 
 def update_currency():
@@ -22,6 +23,7 @@ def home(request):
     dollar = update_currency()
     return render(request, 'main.html', {'dollar' : dollar})
 
+@csrf_exempt
 def delete(request):
     if request.method == "POST":
         if request.POST['type'] == 0:
