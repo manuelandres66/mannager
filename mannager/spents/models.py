@@ -5,8 +5,13 @@ from django.db import models
 class Account(models.Model):
     name = models.CharField(max_length=250)
     total_dollars = models.FloatField()
-    total_pesos = models.FloatField()
+    total_pesos = models.IntegerField()
     currency_dollars = models.BooleanField()
+
+class SubCash(models.Model):
+    dollars = models.FloatField()
+    buy_at = models.IntegerField()
+    account = models.ForeignKey(Account, on_delete=models.CASCADE)
 
 class SpentCategory(models.Model):
     name = models.CharField(max_length=250)
@@ -16,10 +21,10 @@ class SpentCategory(models.Model):
 class Spent(models.Model):
     dollars = models.FloatField()
     pesos = models.IntegerField()
-    name = models.CharField(max_length=250, null=True, blank=True)
+    name = models.CharField(max_length=250)
     date = models.DateTimeField()
     category = models.ForeignKey(SpentCategory, on_delete=models.CASCADE)
-    account = models.ForeignKey(Account, on_delete=models.CASCADE, null=True, blank=True)
+    account = models.ForeignKey(Account, on_delete=models.CASCADE)
 
 class EarnCategory(models.Model):
     name = models.CharField(max_length=250)
