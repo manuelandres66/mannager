@@ -20,4 +20,4 @@ def update_currency():
 # Create your views here.
 def home(request):
     dollar = update_currency()
-    return render(request, 'templates/main.html', {'dollar' : dollar})
+    return render(request, 'main.html', {'dollar' : dollar})
