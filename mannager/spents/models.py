@@ -14,6 +14,7 @@ class SubCash(models.Model):
     dollars = models.FloatField()
     buy_at = models.IntegerField()
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
+    earn = models.ForeignKey('Earn', on_delete=models.CASCADE)
 
 class SpentCategory(models.Model):
     name = models.CharField(max_length=250)
@@ -25,7 +26,7 @@ class Spent(models.Model):
     pesos = models.IntegerField()
     name = models.CharField(max_length=250)
     date = models.DateTimeField()
-    category = models.ForeignKey(SpentCategory, on_delete=models.CASCADE)
+    category = models.ForeignKey(SpentCategory, on_delete=models.RESTRICT)
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
 
 class EarnCategory(models.Model):
@@ -38,5 +39,5 @@ class Earn(models.Model):
     pesos = models.IntegerField()
     name = models.CharField(max_length=250, null=True, blank=True)
     date = models.DateTimeField()
-    category = models.ForeignKey(EarnCategory, on_delete=models.CASCADE)
+    category = models.ForeignKey(EarnCategory, on_delete=models.RESTRICT)
     account = models.ForeignKey(Account, on_delete=models.CASCADE, null=True, blank=True)
