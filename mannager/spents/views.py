@@ -19,4 +19,5 @@ def update_currency():
 
 # Create your views here.
 def home(request):
-    return HttpResponse(update_currency())
+    dollar = update_currency()
+    return render(request, 'templates/main.html', {'dollar' : dollar})
