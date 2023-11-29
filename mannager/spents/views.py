@@ -26,10 +26,10 @@ def home(request):
 @csrf_exempt
 def delete(request):
     if request.method == "POST":
-        print(request.body)
-        if request.POST['type'] == 0:
-            Earn.objects.filter(id=request.POST['id']).delete()
-        elif request.POST['type'] == 1:
-            Spent.objects.filter(id=request.POST['id']).delete()
+        data = json.loads(request.body)
+        if data['type'] == 0:
+            Earn.objects.filter(id=data['id']).delete()
+        elif data['type'] == 1:
+            Spent.objects.filter(id=data['id']).delete()
         return HttpResponse(status=202)
     return HttpResponse(status=400)
