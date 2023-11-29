@@ -26,6 +26,7 @@ def home(request):
 @csrf_exempt
 def delete(request):
     if request.method == "POST":
+        print(request.POST)
         if request.POST['type'] == 0:
             Earn.objects.filter(id=request.POST['id']).delete()
         elif request.POST['type'] == 1:
