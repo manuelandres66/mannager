@@ -57,9 +57,11 @@ def delete(request):
     if request.method == "POST":
         data = json.loads(request.body)
         if data['type'] == 0:
-            Earn.objects.filter(id=data['id']).delete()
+            obj = Earn.objects.filter(id=data['id']).delete()
+            rest_account(obj.account.id, obj.pesos, obj.dollars)
         else:
-            Spent.objects.filter(id=data['id']).delete()
+            obj = Spent.objects.filter(id=data['id']).delete()
+            add_account(obj.account.id, obj.pesos, obj.dollars)
         return HttpResponse(status=202)
     return HttpResponse(status=400)
 
@@ -85,7 +87,7 @@ def add(request):
                 in_dollar=data['in_dollar']
             )
             add_account(data['account'], pesos, dollars)
-            
+
         else:                      #Falta Agregar SubCash
             Spent.objects.create(
                 dollars=dollars,
