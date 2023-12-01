@@ -51,8 +51,8 @@ def subcash_spent(account_id, dollar):
     sub_cashes = SubCash.objects.filter(account=Account.objects.get(id=account_id)).order_by('buy_at')
     index = 0
     while dollar > 0:
-        sub_cash = sub_cashes[index] #$20 en cuenta $10 gasto
-        relative = sub_cash.dollars - dollar #10
+        sub_cash = sub_cashes[index]
+        relative = sub_cash.dollars - dollar 
         print(relative)
         if relative > 0:
             sub_cash.dollars -= dollar
