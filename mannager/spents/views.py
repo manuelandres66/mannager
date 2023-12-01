@@ -74,7 +74,7 @@ def add(request):
             pesos = data['value']
             dollars = pesos_dollar(pesos)
 
-        if data ['type'] == 0:
+        if data ['type'] == 0:    #Falta Agregar SubCash
             Earn.objects.create(
                 dollars=dollars,
                 pesos=pesos,
@@ -85,7 +85,8 @@ def add(request):
                 in_dollar=data['in_dollar']
             )
             add_account(data['account'], pesos, dollars)
-        else:
+            
+        else:                      #Falta Agregar SubCash
             Spent.objects.create(
                 dollars=dollars,
                 pesos=pesos,
