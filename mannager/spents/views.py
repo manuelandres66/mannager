@@ -80,8 +80,8 @@ def add(request):
                 pesos=pesos_dollar,
                 name=data['name'],
                 date=datetime.datetime.now(),
-                category=EarnCategory.objects.get(data['category']),
-                account=data['account'],
+                category=EarnCategory.objects.get(id=data['category']),
+                account=Account.objects.get(id=data['account']),
                 in_dollar=data['in_dollar']
             )
             add_account(data['account'], pesos, dollar)
@@ -92,7 +92,7 @@ def add(request):
                 name=data['name'],
                 date=datetime.datetime.now(),
                 category=SpentCategory.objects.get(id=data['category']),
-                account=data['account'],
+                account=Account.objects.get(id=data['account']),
                 in_dollar=data['in_dollar']
             )
             rest_account(data['account'], pesos, dollar)
