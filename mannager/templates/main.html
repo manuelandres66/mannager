@@ -9,7 +9,7 @@
     <script>
         fetch('/api/add', {
             method: 'POST',
-            body: JSON.stringify({in_dollar: true, value: 20.15, name: 'Gasto X', category: 1, account: 1, type: 0}),
+            body: JSON.stringify({in_dollar: true, value: 20.15, name: 'Gasto X', category: 1, account: 1, type: 0, cash: true}),
             headers: {"Content-type": "application/json; charset=UTF-8"}
         })
         .then((response) => console.log(response))
