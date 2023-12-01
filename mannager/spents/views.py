@@ -57,11 +57,12 @@ def delete(request):
     if request.method == "POST":
         data = json.loads(request.body)
         if data['type'] == 0:
-            obj = Earn.objects.filter(id=data['id']).delete()
+            obj = Earn.objects.filter(id=data['id'])
             rest_account(obj.account.id, obj.pesos, obj.dollars)
         else:
-            obj = Spent.objects.filter(id=data['id']).delete()
+            obj = Spent.objects.filter(id=data['id'])
             add_account(obj.account.id, obj.pesos, obj.dollars)
+        obj.delete()
         return HttpResponse(status=202)
     return HttpResponse(status=400)
 
