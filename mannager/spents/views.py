@@ -66,7 +66,6 @@ def subcash_spent(account_id, dollar):
 # Create your views here.
 def home(request):
     dollar = update_currency()
-    subcash_spent(2, 11)
     return render(request, 'main.html', {'dollar' : dollar})
 
 @csrf_exempt
