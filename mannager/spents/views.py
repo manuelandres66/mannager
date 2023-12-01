@@ -47,9 +47,25 @@ def rest_account(id, pesos, dollar):
     account.save()
     update_currency()
 
+def subcash_spent(account_id, dollar):
+    sub_cashes = SubCash.objects.filter(account=Account.objects.get(id=account_id)).order_by('-buy_at')
+    index = 0
+    while dollar > 0:
+        sub_cash = sub_cashes[index] #$20 en cuenta $10 gasto
+        relative = sub_cash.dollars - dollar #10
+        if relative > 0:
+            sub_cash.dollars -= dollar
+            sub_cash.save()
+            dollar = 0
+        else:
+            sub_cash.delete()
+            dollar = relative * -1
+
+
 # Create your views here.
 def home(request):
     dollar = update_currency()
+    sub_cash(11)
     return render(request, 'main.html', {'dollar' : dollar})
 
 @csrf_exempt
