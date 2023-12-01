@@ -88,7 +88,7 @@ def add(request):
             )
             add_account(data['account'], pesos, dollars)
 
-        else:                      #Falta Agregar SubCash
+        else:                     #Falta Agregar SubCash
             Spent.objects.create(
                 dollars=dollars,
                 pesos=pesos,
