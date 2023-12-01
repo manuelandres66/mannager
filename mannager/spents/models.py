@@ -7,8 +7,8 @@ class Account(models.Model):
     total_dollars = models.FloatField()
     total_pesos = models.IntegerField()
     currency_dollars = models.BooleanField()
-    def __str__(self):
-        return self.name
+    # def __str__(self):
+    #     return self.name
 
 class SubCash(models.Model):
     dollars = models.FloatField()
@@ -18,8 +18,8 @@ class SubCash(models.Model):
 
 class SpentCategory(models.Model):
     name = models.CharField(max_length=250)
-    def __str__(self):
-        return self.name
+    # def __str__(self):
+    #     return self.name
 
 class Spent(models.Model):
     dollars = models.FloatField()
