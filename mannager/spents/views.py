@@ -53,6 +53,7 @@ def subcash_spent(account_id, dollar):
     while dollar > 0:
         sub_cash = sub_cashes[index] #$20 en cuenta $10 gasto
         relative = sub_cash.dollars - dollar #10
+        print(relative)
         if relative > 0:
             sub_cash.dollars -= dollar
             sub_cash.save()
