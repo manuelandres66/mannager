@@ -53,7 +53,7 @@ def home(request):
     return render(request, 'main.html', {'dollar' : dollar})
 
 @csrf_exempt
-def delete(request):
+def delete(request): #Falta perfeccionar efecto cascada SubCash
     if request.method == "POST":
         data = json.loads(request.body)
         if data['type'] == 0:
