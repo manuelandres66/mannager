@@ -77,7 +77,7 @@ def add(request):
         if data ['type'] == 0:
             Earn.objects.create(
                 dollars=dollars,
-                pesos=pesos_dollar,
+                pesos=pesos,
                 name=data['name'],
                 date=datetime.datetime.now(),
                 category=EarnCategory.objects.get(id=data['category']),
@@ -88,7 +88,7 @@ def add(request):
         else:
             Spent.objects.create(
                 dollars=dollars,
-                pesos=pesos_dollar,
+                pesos=pesos,
                 name=data['name'],
                 date=datetime.datetime.now(),
                 category=SpentCategory.objects.get(id=data['category']),
