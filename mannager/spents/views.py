@@ -84,7 +84,7 @@ def add(request):
                 account=Account.objects.get(id=data['account']),
                 in_dollar=data['in_dollar']
             )
-            add_account(data['account'], pesos, dollar)
+            add_account(data['account'], pesos, dollars)
         else:
             Spent.objects.create(
                 dollars=dollars,
@@ -95,5 +95,5 @@ def add(request):
                 account=Account.objects.get(id=data['account']),
                 in_dollar=data['in_dollar']
             )
-            rest_account(data['account'], pesos, dollar)
+            rest_account(data['account'], pesos, dollars)
         return HttpResponse(status=200)
