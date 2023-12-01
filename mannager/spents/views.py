@@ -69,7 +69,7 @@ def add(request):
         data = json.loads(request.body)
         if data['in_dollar']:
             dollars = data['value']
-            pesos = dollar_pesos(dollar)
+            pesos = dollar_pesos(dollars)
         else:
             pesos = data['value']
             dollars = pesos_dollar(pesos)
