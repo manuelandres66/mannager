@@ -5,6 +5,7 @@ import json
 from bs4 import BeautifulSoup
 from django.views.decorators.csrf import csrf_exempt
 from .models import Account, Spent, Earn
+import datetime
 
 
 def update_currency():
@@ -14,11 +15,37 @@ def update_currency():
     DOLLAR = int(header_element.replace(',', ''))
     for account in Account.objects.all():
         if account.currency_dollars:
-            account.total_pesos = account.total_dollars * DOLLAR
+            account.total_pesos = round(account.total_dollars * DOLLAR, 0)
         else:
             account.total_dollars = round(account.total_pesos / DOLLAR, 2)
         account.save()
     return DOLLAR
+
+def pesos_dollar(pesos):
+    dollar = update_currency()
+    return round(pesos / dollar, 2)
+
+def dollar_pesos(dollar)
+    valor_dollar = update_currency()
+    return round(dollar * valor_dollar, 0)
+
+def add_account(id, pesos, dollar):
+    account = Account.objects.get(id=id)
+    if account.currency_dollars:
+        account.total_dollars += dollar
+    else:
+        account.total_pesos += pesos
+    account.save()
+    update_currency()
+
+def rest_account(id, pesos, dollar):
+    account = Account.objects.get(id=id)
+    if account.currency_dollars:
+        account.total_dollars -= dollar
+    else:
+        account.total_pesos -= pesos
+    account.save()
+    update_currency()
 
 # Create your views here.
 def home(request):
@@ -31,7 +58,42 @@ def delete(request):
         data = json.loads(request.body)
         if data['type'] == 0:
             Earn.objects.filter(id=data['id']).delete()
-        elif data['type'] == 1:
+        else:
             Spent.objects.filter(id=data['id']).delete()
         return HttpResponse(status=202)
     return HttpResponse(status=400)
+
+@csrf_exempt
+def add(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        if data['in_dollar']:
+            dollars = data['value']
+            pesos = dollar_pesos(dollar)
+        else:
+            pesos = data['value']
+            dollars = pesos_dollar(pesos)
+
+        if data ['type'] == 0:
+            Earn.objects.create(
+                dollars=dollars,
+                pesos=pesos_dollar,
+                name=data['name'],
+                date=datetime.datetime.now(),
+                category=data['category'],
+                account=data['account'],
+                in_dollar=data['in_dollar']
+            )
+            add_account(data['account'], pesos, dollar)
+        else:
+            Spent.objects.create(
+                dollars=dollars,
+                pesos=pesos_dollar,
+                name=data['name'],
+                date=datetime.datetime.now(),
+                category=data['category'],
+                account=data['account'],
+                in_dollar=data['in_dollar']
+            )
+            rest_account(data['account'], pesos, dollar)
+        return HttpResponse(status=200)

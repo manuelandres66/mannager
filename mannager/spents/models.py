@@ -28,6 +28,7 @@ class Spent(models.Model):
     date = models.DateTimeField()
     category = models.ForeignKey(SpentCategory, on_delete=models.RESTRICT)
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
+    in_dollar = models.BooleanField()
 
 class EarnCategory(models.Model):
     name = models.CharField(max_length=250)
@@ -35,9 +36,10 @@ class EarnCategory(models.Model):
         return self.name
 
 class Earn(models.Model):
-    money = models.FloatField()
+    dollars = models.FloatField()
     pesos = models.IntegerField()
     name = models.CharField(max_length=250, null=True, blank=True)
     date = models.DateTimeField()
     category = models.ForeignKey(EarnCategory, on_delete=models.RESTRICT)
     account = models.ForeignKey(Account, on_delete=models.CASCADE, null=True, blank=True)
+    in_dollar = models.BooleanField()
