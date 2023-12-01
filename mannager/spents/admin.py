@@ -3,7 +3,7 @@ from .models import Spent, SpentCategory, Earn, EarnCategory, Account, SubCash
 # Register your models here.
 
 class SubCashAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in Book._meta.get_fields()]
+    list_display = [field.name for field in SubCash._meta.get_fields()]
 
 
 admin.site.register(Book, BookAdmin)
