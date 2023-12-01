@@ -25,7 +25,7 @@ def pesos_dollar(pesos):
     dollar = update_currency()
     return round(pesos / dollar, 2)
 
-def dollar_pesos(dollar)
+def dollar_pesos(dollar):
     valor_dollar = update_currency()
     return round(dollar * valor_dollar, 0)
 
