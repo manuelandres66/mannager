@@ -32,8 +32,8 @@ class Spent(models.Model):
 
 class EarnCategory(models.Model):
     name = models.CharField(max_length=250)
-    def __str__(self):
-        return self.name
+    # def __str__(self):
+    #     return self.name
 
 class Earn(models.Model):
     dollars = models.FloatField()
