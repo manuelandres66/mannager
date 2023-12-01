@@ -4,7 +4,7 @@ import requests
 import json
 from bs4 import BeautifulSoup
 from django.views.decorators.csrf import csrf_exempt
-from .models import Account, Spent, Earn
+from .models import Account, Spent, Earn, SpentCategory, EarnCategory
 import datetime
 
 
@@ -80,7 +80,7 @@ def add(request):
                 pesos=pesos_dollar,
                 name=data['name'],
                 date=datetime.datetime.now(),
-                category=data['category'],
+                category=EarnCategory.objects.get(data['category']),
                 account=data['account'],
                 in_dollar=data['in_dollar']
             )
@@ -91,7 +91,7 @@ def add(request):
                 pesos=pesos_dollar,
                 name=data['name'],
                 date=datetime.datetime.now(),
-                category=data['category'],
+                category=SpentCategory.objects.get(id=data['category']),
                 account=data['account'],
                 in_dollar=data['in_dollar']
             )
