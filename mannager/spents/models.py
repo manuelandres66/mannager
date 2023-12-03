@@ -29,6 +29,7 @@ class Spent(models.Model):
     category = models.ForeignKey(SpentCategory, on_delete=models.RESTRICT)
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
     in_dollar = models.BooleanField()
+    in_cash = models.BooleanField()
 
 class EarnCategory(models.Model):
     name = models.CharField(max_length=250)
@@ -43,3 +44,4 @@ class Earn(models.Model):
     category = models.ForeignKey(EarnCategory, on_delete=models.RESTRICT)
     account = models.ForeignKey(Account, on_delete=models.CASCADE, null=True, blank=True)
     in_dollar = models.BooleanField()
+    in_cash = models.BooleanField()

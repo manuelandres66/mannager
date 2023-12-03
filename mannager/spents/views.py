@@ -101,11 +101,12 @@ def add(request):
                 date=datetime.datetime.now(),
                 category=EarnCategory.objects.get(id=data['category']),
                 account=account,
-                in_dollar=data['in_dollar']
+                in_dollar=data['in_dollar'],
+                in_cash=data['in_cash']
             )
             add_account(data['account'], pesos, dollars)
             
-            if data['cash'] and data['in_dollar']:
+            if data['in_cash'] and data['in_dollar']:
                 SubCash.objects.create(dollars=dollars, buy_at=update_currency(), account=account, earn=new_earn)
 
         else:                     #Falta Agregar SubCash
@@ -116,7 +117,12 @@ def add(request):
                 date=datetime.datetime.now(),
                 category=SpentCategory.objects.get(id=data['category']),
                 account=Account.objects.get(id=data['account']),
-                in_dollar=data['in_dollar']
+                in_dollar=data['in_dollar'],
+                in_cash=data['in_cash']
             )
             rest_account(data['account'], pesos, dollars)
+
+            if data['in_cash'] and data['in_dollar']:
+                subcash_spent(data['account'], dollars)
+            
         return HttpResponse(status=200)
