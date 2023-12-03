@@ -68,15 +68,23 @@ def home(request):
     return render(request, 'main.html', {'dollar' : dollar})
 
 @csrf_exempt
-def delete(request): #Falta perfeccionar efecto cascada SubCash
+def delete(request): 
     if request.method == "POST":
         data = json.loads(request.body)
         if data['type'] == 0:
             obj = Earn.objects.filter(id=data['id'])
             rest_account(obj.account.id, obj.pesos, obj.dollars)
+            if obj.in_cash and obj.in_dollar:
+                subcash_spent(obj.account.id, obj.dollars) #Falta perfeccionar este elemento 
+                                                           # Pq quita dollares baratos y no los comprados
         else:
             obj = Spent.objects.filter(id=data['id'])
             add_account(obj.account.id, obj.pesos, obj.dollars)
+
+            if obj.in_cash and obj.in_dollar:
+                SubCash.objects.create(dollars=obj.dollars, account=obj.account,
+                but_at=round(obj.pesos / obj.dollars, 0), earn=None)
+
         obj.delete()
         return HttpResponse(status=202)
     return HttpResponse(status=400)
@@ -109,7 +117,7 @@ def add(request):
             if data['in_cash'] and data['in_dollar']:
                 SubCash.objects.create(dollars=dollars, buy_at=update_currency(), account=account, earn=new_earn)
 
-        else:                     #Falta Agregar SubCash
+        else:
             Spent.objects.create(
                 dollars=dollars,
                 pesos=pesos,

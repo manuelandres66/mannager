@@ -14,7 +14,7 @@ class SubCash(models.Model):
     dollars = models.FloatField()
     buy_at = models.IntegerField()
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
-    earn = models.ForeignKey('Earn', on_delete=models.CASCADE)
+    earn = models.ForeignKey('Earn', on_delete=models.SET_NULL, null=True)
 
 class SpentCategory(models.Model):
     name = models.CharField(max_length=250)
