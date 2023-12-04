@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 from django.views.decorators.csrf import csrf_exempt
 from .models import Account, Spent, Earn, SpentCategory, EarnCategory, SubCash
 from django.utils import timezone
-
+import datetime 
 
 def update_currency():
     html_content = requests.get("https://www.dolarhoy.co").text
@@ -64,10 +64,6 @@ def rest_account(id, pesos, dollar):
 
 
 # Create your views here.
-
-def home(request):
-    dollar = update_currency()
-    return render(request, 'main.html', {'dollar' : dollar})
 
 @csrf_exempt
 def delete(request): 
@@ -181,6 +177,11 @@ def edit(request):
 
 @csrf_exempt
 def get_earn(request):
-    # if request.method == "POST":
-    #     data = json.loads()
-    Earn.objects.filter()
+    one_day = datetime.now() - timedelta(days=1)
+    one_day_obj = Earn.objects.filter(date__lt=timezone.now(), data__gte=one_day)
+    print(one_day_obj.values())
+
+def home(request):
+    dollar = update_currency()
+    get_earn(request)
+    return render(request, 'main.html', {'dollar' : dollar})
