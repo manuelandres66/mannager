@@ -77,8 +77,7 @@ def delete(request):
             obj = Earn.objects.filter(id=data['id'])
             rest_account(obj.account.id, obj.pesos, obj.dollars)
             if obj.in_cash and obj.in_dollar:
-                subcash_spent(obj.account.id, obj.dollars) #Falta perfeccionar este elemento 
-                                                           # Pq quita dollares baratos y no los comprados
+                subcash_spent(obj.account.id, obj.dollars) #ERROR A
         else:
             obj = Spent.objects.filter(id=data['id'])
             add_account(obj.account.id, obj.pesos, obj.dollars)
@@ -143,20 +142,30 @@ def edit(request):
         data = json.loads(request.body)
         earn = data['type'] == 0
         obj = Earn.objects.get(id=data['id']) if earn else Spent.objects.get(id=data['id'])
-        ac, pe, dol = data['account'], data['pesos'], data['dollars']
+        ac, pe, dol, in_cash = data['account'], data['pesos'], data['dollars'],data['in_cash']
         ac_obj = Account.object.get(id=ac)
 
-        if obj.account.id != ac: 
-            if data['in_cash'] != ac_obj.in_cash: #Check both in cash
+        if obj.account.id != ac: #Changing account
+            if in_cash != ac_obj.in_cash: #Check compatibily bewteen account and edit
                 return JsonResponse({'error':'Imposible Cash Transference'}, status=500)
+
             rest_account(obj.account.id, obj.pesos, obj.dollars)
             add_account(ac, pe, dol)
+
         else:
             difference = dol - obj.dollars #Check if earned or spent some money in the general account
             if difference >= 0:
-                add_account(ac, pe, dol) if earn else rest_account(ac, pe, dol) #See subcash problems
+                add_account(ac, pe, dol) if earn else rest_account(ac, pe, dol)
             else:
                 rest_account(ac, pe, dol) if earn else add_account(ac, pe, dol)
+
+
+        #SubCash Stuff
+        if in_cash != obj.in_cash:
+            if in_cash: #Changed to cash
+                Subcash.objects.create(dollars=dol, buy_at=round(pe/dol,0),earn=obj,account=ac_obj) if earn else subcash_spent(ac_obj, dol) #ERROR A
+            else: #Changed to virtual
+                Subcash.objects.create(dollars=obj.dollars, buy_at=round(obj.pesos/obj.dollars,0),account=obj.account) if not earn else subcash_spent(obj.account.id, obj.dollars) #ERROR A
 
         obj.dollars=dol
         obj.pesos=pe
@@ -165,7 +174,7 @@ def edit(request):
         obj.category=SpentCategory.objects.get(id=data['category'])
         obj.account=ac_obj
         obj.in_dollar=data['in_dollar']
-        obj.in_cash=data['in_cash']
+        obj.in_cash=in_cash
         obj.save()
         return HttpResponse(status=200)
             
