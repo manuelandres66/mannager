@@ -134,3 +134,10 @@ def add(request):
                 subcash_spent(data['account'], dollars)
             
         return HttpResponse(status=200)
+    
+# @csrf_exempt 
+# def edit(request):
+    # if request.method == "POST":
+        # data = json.loads(request.body)
+        # if data['type'] == 0:
+            # 
