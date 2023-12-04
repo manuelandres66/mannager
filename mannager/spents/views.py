@@ -182,7 +182,7 @@ def get_earn(request):
     print(one_day)
     one_day_obj = Earn.objects.filter(date__gte=one_day, date__lt=timezone.now())
     list_result = [entry for entry in one_day_obj.values()]
-    print(list_result)
+    print(len(list_result))
 
 def home(request):
     dollar = update_currency()
