@@ -5,7 +5,7 @@ import json
 from bs4 import BeautifulSoup
 from django.views.decorators.csrf import csrf_exempt
 from .models import Account, Spent, Earn, SpentCategory, EarnCategory, SubCash
-import datetime
+from django.utils import timezone
 
 
 def update_currency():
@@ -64,7 +64,7 @@ def rest_account(id, pesos, dollar):
 
 
 # Create your views here.
-##########################################################
+
 def home(request):
     dollar = update_currency()
     return render(request, 'main.html', {'dollar' : dollar})
@@ -107,7 +107,7 @@ def add(request):
                 dollars=dollars,
                 pesos=pesos,
                 name=data['name'],
-                date=datetime.datetime.now(),
+                date=timezone.now(),
                 category=EarnCategory.objects.get(id=data['category']),
                 account=account,
                 in_dollar=data['in_dollar'],
@@ -123,7 +123,7 @@ def add(request):
                 dollars=dollars,
                 pesos=pesos,
                 name=data['name'],
-                date=datetime.datetime.now(),
+                date=timezone.now(),
                 category=SpentCategory.objects.get(id=data['category']),
                 account=Account.objects.get(id=data['account']),
                 in_dollar=data['in_dollar'],
@@ -163,7 +163,7 @@ def edit(request):
         #SubCash Stuff
         if in_cash != obj.in_cash:
             if in_cash: #Changed to cash
-                Subcash.objects.create(dollars=dol, buy_at=round(pe/dol,0),earn=obj,account=ac_obj) if earn else subcash_spent(ac_obj, dol) #ERROR A
+                Subcash.objects.create(dollars=dol, buy_at=round(pe/dol,0),earn=obj,account=ac_obj) if earn else subcash_spent(ac, dol) #ERROR A
             else: #Changed to virtual
                 Subcash.objects.create(dollars=obj.dollars, buy_at=round(obj.pesos/obj.dollars,0),account=obj.account) if not earn else subcash_spent(obj.account.id, obj.dollars) #ERROR A
 
@@ -178,3 +178,9 @@ def edit(request):
         obj.save()
         return HttpResponse(status=200)
             
+
+@csrf_exempt
+def get_earn(request):
+    # if request.method == "POST":
+    #     data = json.loads()
+    Earn.objects.filter()

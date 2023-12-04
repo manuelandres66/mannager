@@ -21,6 +21,7 @@ from spents import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
-    path('api/delete', views.delete),
-    path('api/add', views.add),
+    path('api/easp/delete', views.delete),
+    path('api/easp/add', views.add),
+    path('api/easp/edit', views.edit)
 ]
