@@ -177,7 +177,7 @@ def edit(request):
 
 @csrf_exempt
 def get_earn(request):
-    one_day = datetime.datetime.now() - datetime.timedelta(days=1)
+    one_day = datetime.datetime.now() - datetime.timedelta(moths=1)
     print(one_day)
     one_day_obj = Earn.objects.filter(date__gte=one_day, date__lt=timezone.now())
     print(one_day_obj.values())
