@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 import requests
 import json
 from bs4 import BeautifulSoup
@@ -29,6 +29,20 @@ def dollar_pesos(dollar):
     valor_dollar = update_currency()
     return round(dollar * valor_dollar, 0)
 
+def subcash_spent(account_id, dollar):
+    sub_cashes = SubCash.objects.filter(account=Account.objects.get(id=account_id)).order_by('buy_at')
+    index = 0
+    while dollar > 0:
+        sub_cash = sub_cashes[index]
+        relative = sub_cash.dollars - dollar 
+        if relative > 0:
+            sub_cash.dollars -= dollar
+            sub_cash.save()
+            dollar = 0
+        else:
+            sub_cash.delete()
+            dollar = relative * -1
+
 def add_account(id, pesos, dollar):
     account = Account.objects.get(id=id)
     if account.currency_dollars:
@@ -47,22 +61,10 @@ def rest_account(id, pesos, dollar):
     account.save()
     update_currency()
 
-def subcash_spent(account_id, dollar):
-    sub_cashes = SubCash.objects.filter(account=Account.objects.get(id=account_id)).order_by('buy_at')
-    index = 0
-    while dollar > 0:
-        sub_cash = sub_cashes[index]
-        relative = sub_cash.dollars - dollar 
-        if relative > 0:
-            sub_cash.dollars -= dollar
-            sub_cash.save()
-            dollar = 0
-        else:
-            sub_cash.delete()
-            dollar = relative * -1
 
 
 # Create your views here.
+##########################################################
 def home(request):
     dollar = update_currency()
     return render(request, 'main.html', {'dollar' : dollar})
@@ -135,9 +137,35 @@ def add(request):
             
         return HttpResponse(status=200)
     
-# @csrf_exempt 
-# def edit(request):
-    # if request.method == "POST":
-        # data = json.loads(request.body)
-        # if data['type'] == 0:
-            # a
+@csrf_exempt 
+def edit(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        earn = data['type'] == 0
+        obj = Earn.objects.get(id=data['id']) if earn else Spent.objects.get(id=data['id'])
+        ac, pe, dol = data['account'], data['pesos'], data['dollars']
+        ac_obj = Account.object.get(id=ac)
+
+        if obj.account.id != ac: 
+            if data['in_cash'] != ac_obj.in_cash: #Check both in cash
+                return JsonResponse({'error':'Imposible Cash Transference'}, status=500)
+            rest_account(obj.account.id, obj.pesos, obj.dollars)
+            add_account(ac, pe, dol)
+        else:
+            difference = dol - obj.dollars #Check if earned or spent some money in the general account
+            if difference >= 0:
+                add_account(ac, pe, dol) if earn else rest_account(ac, pe, dol)
+            else:
+                rest_account(ac, pe, dol) if earn else add_account(ac, pe, dol)
+
+        obj.dollars=dol
+        obj.pesos=pe
+        obj.name=data['name']
+        obj.date=data['date']
+        obj.category=SpentCategory.objects.get(id=data['category'])
+        obj.account=ac_obj
+        obj.in_dollar=data['in_dollar']
+        obj.in_cash=data['in_cash']
+        obj.save()
+        return HttpResponse(status=200)
+            

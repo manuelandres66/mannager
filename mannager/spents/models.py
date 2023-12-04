@@ -7,6 +7,7 @@ class Account(models.Model):
     total_dollars = models.FloatField()
     total_pesos = models.IntegerField()
     currency_dollars = models.BooleanField()
+    in_cash = models.BooleanField()
     def __str__(self):
         return f"{self.name}({self.id})"
 
