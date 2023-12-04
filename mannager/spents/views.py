@@ -154,7 +154,7 @@ def edit(request):
         else:
             difference = dol - obj.dollars #Check if earned or spent some money in the general account
             if difference >= 0:
-                add_account(ac, pe, dol) if earn else rest_account(ac, pe, dol)
+                add_account(ac, pe, dol) if earn else rest_account(ac, pe, dol) #See subcash problems
             else:
                 rest_account(ac, pe, dol) if earn else add_account(ac, pe, dol)
 
