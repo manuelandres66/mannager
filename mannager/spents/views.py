@@ -7,6 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import Account, Spent, Earn, SpentCategory, EarnCategory, SubCash
 from django.utils import timezone
 import datetime 
+from dateutil.relativedelta import relativedelta
 
 def update_currency():
     html_content = requests.get("https://www.dolarhoy.co").text
@@ -177,7 +178,7 @@ def edit(request):
 
 @csrf_exempt
 def get_earn(request):
-    one_day = datetime.datetime.now() - datetime.timedelta(moths=1)
+    one_day = datetime.datetime.now() - relativedelta(months=6)
     print(one_day)
     one_day_obj = Earn.objects.filter(date__gte=one_day, date__lt=timezone.now())
     list_result = [entry for entry in one_day_obj.values()]
